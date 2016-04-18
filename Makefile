@@ -1,4 +1,5 @@
 PKG_NAME := testresources
-URL := https://pypi.python.org/packages/source/t/testresources/testresources-0.2.7.tar.gz
+URL := https://pypi.python.org/packages/source/t/testresources/testresources-2.0.0.tar.gz
+ARCHIVES :=
 
 include ../common/Makefile.common
