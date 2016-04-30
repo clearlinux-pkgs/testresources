@@ -4,7 +4,7 @@
 #
 Name     : testresources
 Version  : 2.0.0
-Release  : 16
+Release  : 17
 URL      : https://pypi.python.org/packages/source/t/testresources/testresources-2.0.0.tar.gz
 Source0  : https://pypi.python.org/packages/source/t/testresources/testresources-2.0.0.tar.gz
 Summary  : Testresources, a pyunit extension for managing expensive test resources
