@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+2.0.1
+-----
+
+* Fix #1590536 classifiers not reported in PyPI
+
 2.0.0
 -----
 
