@@ -4,7 +4,7 @@
 #
 Name     : testresources
 Version  : 2.0.1
-Release  : 20
+Release  : 21
 URL      : http://pypi.debian.net/testresources/testresources-2.0.1.tar.gz
 Source0  : http://pypi.debian.net/testresources/testresources-2.0.1.tar.gz
 Summary  : Testresources, a pyunit extension for managing expensive test resources
