@@ -6,67 +6,43 @@
 #
 Name     : testresources
 Version  : 2.0.1
-Release  : 43
+Release  : 44
 URL      : http://pypi.debian.net/testresources/testresources-2.0.1.tar.gz
 Source0  : http://pypi.debian.net/testresources/testresources-2.0.1.tar.gz
-Source99 : http://pypi.debian.net/testresources/testresources-2.0.1.tar.gz.asc
+Source1 : http://pypi.debian.net/testresources/testresources-2.0.1.tar.gz.asc
 Summary  : Testresources, a pyunit extension for managing expensive test resources
 Group    : Development/Tools
 License  : Apache-2.0
-Requires: testresources-python3
-Requires: testresources-python
-Requires: fixtures
+Requires: testresources-license = %{version}-%{release}
+Requires: testresources-python = %{version}-%{release}
+Requires: testresources-python3 = %{version}-%{release}
 Requires: pbr
+BuildRequires : buildreq-distutils3
 BuildRequires : fixtures
 BuildRequires : pbr
-BuildRequires : pip
 BuildRequires : pluggy
 BuildRequires : py-python
 BuildRequires : pytest
-
-BuildRequires : python3-dev
-BuildRequires : setuptools
 BuildRequires : six
 BuildRequires : tox
 BuildRequires : virtualenv
 
 %description
+testresources: extensions to python unittest to allow declarative use
 of resources by test cases.
-        
-        Copyright (C) 2005-2013  Robert Collins <robertc@robertcollins.net>
-        
-          Licensed under either the Apache License, Version 2.0 or the BSD 3-clause
-          license at the users choice. A copy of both licenses are available in the
-          project source as Apache-2.0 and BSD. You may not use this file except in
-          compliance with one of these two licences.
-        
-          Unless required by applicable law or agreed to in writing, software
-          distributed under these licenses is distributed on an "AS IS" BASIS, WITHOUT
-          WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
-          license you chose for the specific language governing permissions and
-          limitations under that license.
-        
-          See the COPYING file for full details on the licensing of Testresources.
-        
-        
-        Testresources
-        +++++++++++++
-        
-        testresources extends unittest with a clean and simple api to provide test
-        optimisation where expensive common resources are needed for test cases - for
-        example sample working trees for VCS systems, reference databases for
-        enterprise applications, or web servers ... let imagination run wild.
-        
-        Dependencies to build/selftest
-        ==============================
-        
-        * Python 2.6+ (or 3.3+)
-        * docutils
+
+%package license
+Summary: license components for the testresources package.
+Group: Default
+
+%description license
+license components for the testresources package.
+
 
 %package python
 Summary: python components for the testresources package.
 Group: Default
-Requires: testresources-python3
+Requires: testresources-python3 = %{version}-%{release}
 
 %description python
 python components for the testresources package.
@@ -83,29 +59,46 @@ python3 components for the testresources package.
 
 %prep
 %setup -q -n testresources-2.0.1
+cd %{_builddir}/testresources-2.0.1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1517698563
-python3 setup.py build -b py3
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1575554123
+# -Werror is for werrorists
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
+export MAKEFLAGS=%{?_smp_mflags}
+python3 setup.py build
 
 %check
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-PYTHONPATH=%{buildroot}/usr/lib/python3.6/site-packages python3 setup.py test
+PYTHONPATH=%{buildroot}$(python -c "import sys; print(sys.path[-1])") python setup.py test
 %install
+export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
-python3 -tt setup.py build -b py3 install --root=%{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/testresources
+cp %{_builddir}/testresources-2.0.1/Apache-2.0 %{buildroot}/usr/share/package-licenses/testresources/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+cp %{_builddir}/testresources-2.0.1/COPYING %{buildroot}/usr/share/package-licenses/testresources/13c2751fd0be1e19605eb473726b1d9b309868bc
+python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
 
 %files
 %defattr(-,root,root,-)
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/testresources/13c2751fd0be1e19605eb473726b1d9b309868bc
+/usr/share/package-licenses/testresources/2b8b815229aa8a61e483fb4ba0588b8b6c491890
 
 %files python
 %defattr(-,root,root,-)
