@@ -6,7 +6,7 @@
 #
 Name     : testresources
 Version  : 2.0.1
-Release  : 56
+Release  : 57
 URL      : http://pypi.debian.net/testresources/testresources-2.0.1.tar.gz
 Source0  : http://pypi.debian.net/testresources/testresources-2.0.1.tar.gz
 Source1  : http://pypi.debian.net/testresources/testresources-2.0.1.tar.gz.asc
